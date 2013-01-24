@@ -1,6 +1,7 @@
 package com.rogue.resume.models;
 
 import com.google.appengine.api.datastore.Key;
+import com.google.appengine.labs.repackaged.com.google.common.base.Objects;
 
 import java.util.Map;
 import javax.jdo.annotations.IdGeneratorStrategy;
@@ -18,6 +19,9 @@ import org.joda.time.Interval;
  */
 @PersistenceCapable
 public class Course {
+    //**********************************************************************************************
+    // Member Variables
+    //**********************************************************************************************
     /** 
      * Course code used when displaying the abbreviated name of the course
      * i.e the 600 in CSE600.
@@ -25,8 +29,12 @@ public class Course {
     @Persistent
     private int code;
     
+    /** Number of credits the course is worth. */
+    @Persistent
+    private int credits;
+    
     /** Department to which the course belongs. */
-    @NotPersistent
+    @Persistent
     private Department department;
     
     /** Description of the course. */
@@ -61,6 +69,52 @@ public class Course {
     @NotPersistent
     private Interval whenEnrolled;
 
+    //**********************************************************************************************
+    // Object Functions
+    //**********************************************************************************************
+    @Override
+    public final boolean equals(final Object object) {
+        if ((object == null) || !(object instanceof Course)) {
+            return false;
+        }
+        
+        final Course comparee = (Course) object;
+        
+        return (Objects.equal(this.code, comparee.code) &&
+                Objects.equal(this.credits, comparee.credits) &&
+                Objects.equal(this.department, comparee.department) &&
+                Objects.equal(this.description, comparee.description) &&
+                Objects.equal(this.gpa, comparee.gpa) &&
+                Objects.equal(this.id, comparee.id) &&
+                Objects.equal(this.name, comparee.name) &&
+                Objects.equal(this.professor, comparee.professor) &&
+                Objects.equal(this.skillsStudied, comparee.skillsStudied) &&
+                Objects.equal(this.whenEnrolled, comparee.whenEnrolled));
+    }
+    
+    @Override
+    public final int hashCode() {
+        return Objects.hashCode(code, credits, department, description, gpa, id, name, professor, 
+                skillsStudied, whenEnrolled);
+    }
+    
+    @Override
+    public final String toString() {
+        return Objects.toStringHelper(this).add("code", code)
+                                           .add("credits", credits)
+                                           .add("department", department)
+                                           .add("description", description)
+                                           .add("gpa", gpa)
+                                           .add("id", id)
+                                           .add("name", name)
+                                           .add("professor", professor)
+                                           .add("skillsStudied", skillsStudied)
+                                           .add("whenEnrolled", whenEnrolled).toString();
+    }
+    
+    //**********************************************************************************************
+    // Getters / Setters
+    //**********************************************************************************************
     public int getCode() { return code; }
     public Department getDepartment() { return department; }
     public String getDescription() { return description; }
